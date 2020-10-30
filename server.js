@@ -111,8 +111,11 @@ app.get('/messages', function(request, response) {
 // let form = document.getElementById("myForm");
 //Create
 app.post("/messages", function (req, res) {
-  const msg = req.body;
-  // msg.timeSpent = new Date().toISOString();
+  let msg = {
+    id:req.body.id,
+  from:req.body.from,
+  text:req.body.text}
+  msg.timeSpent = new Date().toISOString();
   console.log(msg)
     if (Object.keys( msg).length === 0){ 
     res.send({status:400})
