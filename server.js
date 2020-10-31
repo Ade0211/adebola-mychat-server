@@ -15,56 +15,7 @@ let anotherMessage = {
   from: "Ade",
   text: "hi world!"
 }
-let one = {
-  id: 2,
-  from: "Bart",
-  text: "Welcome to CYF chat system!"
-}
-let two = {
-  id: 3,
-  from: "Ade",
-  text: "hi world!"
-}
-let three = {
-  id: 4,
-  from: "Bart",
-  text: "Welcome to CYF chat system!"
-}
-let four = {
-  id: 5,
-  from: "Ade",
-  text: "hi world!"
-}
-let five = {
-  id: 6,
-  from: "Bart",
-  text: "Welcome to CYF chat system!"
-}
-let six = {
-  id: 7,
-  from: "Ade",
-  text: "hi world!"
-}
-let seven = {
-  id: 8,
-  from: "Bart",
-  text: "Welcome to CYF chat system!"
-}
-let eight = {
-  id: 9,
-  from: "Ade",
-  text: "hi world!"
-}
-let nine = {
-  id: 10,
-  from: "Bart",
-  text: "Welcome to CYF chat system!"
-}
-let ten = {
-  id: 11,
-  from: "Ade",
-  text: "hi world!"
-}
+
 //This array is our "data store".
 //We will start with one message in the array.
 //Note: messages will be lost when Glitch restarts our server.
