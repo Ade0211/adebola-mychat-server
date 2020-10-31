@@ -116,7 +116,8 @@ app.post("/messages", function (req, res) {
   from:req.body.from,
   text:req.body.text}
   msg.timeSpent = new Date().toISOString();
-  let
+  let newId = Math.max.apply(null, messages.map(x=> x.id))+ 1;
+  msg.id =newId
   console.log(msg)
     if (Object.keys( msg).length === 0){ 
     res.send({status:400})
