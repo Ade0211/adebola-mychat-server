@@ -23,6 +23,7 @@ let messages = [welcomeMessage, anotherMessage]
 app.get('/', function(request, response) {
   response.sendFile(__dirname + '/index.html');
 });
+//SEARCH
 app.get("/messages/search", (req, res)=>{
   let mySearch = req.query.term;
   console.log(mySearch)
@@ -35,6 +36,7 @@ app.get("/messages/search", (req, res)=>{
 })
 app.get("/submit",(req,res)=>{
 })
+//DISPLAY LATEST MESSAGES
 app.get("/messages/display" , (req,res)=> {
   let counter = 0;
   let carryOn=true;
