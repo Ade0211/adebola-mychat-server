@@ -1,119 +1,73 @@
 const express = require("express");
-const cors = require('cors')
+const cors = require("cors");
 const app = express();
-const bodyParser = require("body-parser")
+let bodyParser=require("body-parser");
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors())
-let welcomeMessage = {
-  id: 0,
-  from: "Bart",
-  text: "Welcome to CYF chat system!"
-}
-let anotherMessage = {
-  id: 1,
-  from: "Ade",
-  text: "hi world!"
-}
-
-//This array is our "data store".
-//We will start with one message in the array.
-//Note: messages will be lost when Glitch restarts our server.
-let messages = [welcomeMessage, anotherMessage]
-app.get('/', function(request, response) {
-  response.sendFile(__dirname + '/index.html');
-});
-//SEARCH
-app.get("/messages/search", (req, res)=>{
-  let mySearch = req.query.term;
-  console.log(mySearch)
-  let filteredList=messages.filter((msg)=> msg.text.toLocaleLowerCase().includes(mySearch.toLocaleLowerCase()))
-  // messages.filter(obj => {obj.text.toLowerCase().includes(mySearch) ? res.json(obj.text): res.json({success:false})})
-  if(filteredList)
-  res.json(filteredList)
-  else
-  res.json({success:false})
-})
-app.get("/submit",(req,res)=>{
-})
-//DISPLAY LATEST MESSAGES
-app.get("/messages/display" , (req,res)=> {
-  let counter = 0;
-  let carryOn=true;
-  let i=messages.length-1;
-  let tenMessages=[];
- while(carryOn)
- {
-   tenMessages.push(messages[i]);
-   i=i-1;
-   counter=counter+1;
-   if(counter >= 10 || i < 0){
-    carryOn = false;
-   }
- }
- res.send(tenMessages);
- res.send("it works");
-//  console.log(tenMessages);
- console.log("it is working");
-} )
-app.get('/messages', function(request, response) {
-  let name = request.query.from;
-  console.log(name)
-  response.json(messages);
-});
-// let form = document.getElementById("myForm");
-//Create
-app.post("/messages", function (req, res) {
-  let msg = {
-    // id:req.body.id,
-  from:req.body.from,
-  text:req.body.text}
-  msg.timeSpent = new Date().toISOString();
-  let newId = Math.max.apply(null, messages.map(x=> x.id))+ 1;
-  msg.id =newId
-  console.log(msg)
-    if (Object.keys( msg).length === 0){ 
-    res.send({status:400})
-  }else{ 
-    messages.push(msg);
-    res.json(messages)
+app.use(express.json());
+app.use(cors());
+let customers = [
+  {
+    id: 0,
+    name: "Jon Smith"
+  },
+  {
+    id: 1,
+    name: "Fatima Hussain"
+  },
+  {
+    id: 2,
+    name: "Carlos Santana"
   }
-
+]
+let nextIndex = 100;
+app.get("/", function(request, response) {
+  response.send("Welcome to CYF customers server");
 });
-
-app.get("/messages/:id", function (req, res) {
- const {id} = req.params
- const myMessages = messages.find(e=> e.id == id);
-  myMessages? res.json(myMessages): res.send("data not found");
+app.get("/customers",function(request,response){
+  response.send(customers);
+})
+app.get("/customers/:id", function(request, response) {
+  const id = request.params.id;
+  const recipe = customers.filter(r => r.id==id);
+  if (recipe) {
+    response.json(recipe);
+  } else {
+    response.sendStatus(404);
+  }
 });
-//delete
-app.delete("/messages/:id", function (req, res) {
-  const {id}= req.params;
- messages= messages.filter(e=> e.id !=id);
-  res.send(messages);
- res.send("single album deleted")
+//correctoin => Send customers instead of recipe.
+app.post("/customers", function(request, response) {
+  const recipe = request.body;
+  customers.push(recipe);
+  response.status(201).json(customers);
 });
-//update
-app.patch("/messages/:id", function (req, res) {
-  const {id}= req.params;
-  const {from, text} = req.body
- const updateMyMessages= messages.find(e=> e.id ==id);
-  if(from)
-    updateMyMessages.from = from;
+//correction => changed find to filter.
+app.put("/customers/:id", function(request, response) {
+  const id = request.params.id;
+  let recipeSubmitted = request.body;
+  let existingRecipe = customers.filter(r => r.id === id);
+  if (existingRecipe) {
+    existingRecipe = recipeSubmitted;
+    console.log(existingRecipe)
+    response.json(existingRecipe);
+  } else {
+    response.sendStatus(404);
+  }
+});
+app.delete("/customers/:id", function(request, response) {
+  const id = request.params.id // no typed id
+  //indexToDelete is an array.
+  const indexToDelete = customers.filter(item => item.id ==id );
+  if(indexToDelete.length !=[])
+    {
+       if(indexToDelete[0].id>=0)
+      {
+        customers=customers.filter(item=> item.id!=indexToDelete[0].id)
+        response.send(customers);
+      }
+    }
   else
-    updateMyMessages.from = "";
-  if(text)
-    updateMyMessages.text = text;
-  else
-    updateMyMessages.text = "";
-  res.send(updateMyMessages);
- res.send("messages Updated")
+      response.send({status:404})
 });
-app.get('/messages', function(request, response) {
-  let name = request.query.from;
-  console.log(name)
-  response.json(messages);
-});
-app.listen(8000, ()=> {
-  console.log("server started on port 8000")
-});
+app.listen(process.env.PORT);
