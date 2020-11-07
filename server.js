@@ -34,8 +34,7 @@ app.get("/messages/search", (req, res)=>{
   else
   res.json({success:false})
 })
-app.get("/submit",(req,res)=>{
-})
+
 //DISPLAY LATEST MESSAGES
 app.get("/messages/display" , (req,res)=> {
   let counter = 0;
@@ -56,6 +55,7 @@ app.get("/messages/display" , (req,res)=> {
 //  console.log(tenMessages);
  console.log("it is working");
 } )
+//read
 app.get('/messages', function(request, response) {
   let name = request.query.from;
   console.log(name)
@@ -80,7 +80,7 @@ app.post("/messages", function (req, res) {
   }
 
 });
-
+//get messages by id
 app.get("/messages/:id", function (req, res) {
  const {id} = req.params
  const myMessages = messages.find(e=> e.id == id);
@@ -93,6 +93,8 @@ app.delete("/messages/:id", function (req, res) {
   res.send(messages);
  res.send("single album deleted")
 });
+
+
 //update
 app.patch("/messages/:id", function (req, res) {
   const {id}= req.params;
@@ -109,6 +111,7 @@ app.patch("/messages/:id", function (req, res) {
   res.send(updateMyMessages);
  res.send("messages Updated")
 });
+
 app.get('/messages', function(request, response) {
   let name = request.query.from;
   console.log(name)
