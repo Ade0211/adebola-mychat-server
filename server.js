@@ -96,20 +96,22 @@ app.delete("/messages/:id", function (req, res) {
 
 
 //update
+
 app.patch("/messages/:id", function (req, res) {
   const {id}= req.params;
   const {from, text} = req.body
+  let newMessage = {text:req.body.text,from:req.body.from};
  const updateMyMessages= messages.find(e=> e.id ==id);
-  if(from)
-    updateMyMessages.from = from;
-  else
-    updateMyMessages.from = "";
-  if(text)
-    updateMyMessages.text = text;
-  else
-    updateMyMessages.text = "";
-  res.send(updateMyMessages);
- res.send("messages Updated")
+  if(updateMyMessages!="" && newMessage!="") 
+   {
+    updateMyMessages.from = newMessage.from; 
+    updateMyMessages.text = newMessage.text;
+    res.status(200).send("updated")
+   } 
+    else{
+     res.status(400).send("message not found")
+    }
+
 });
 
 app.get('/messages', function(request, response) {
